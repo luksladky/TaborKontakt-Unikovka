@@ -1,4 +1,4 @@
-# kontakt_unikovka
+# Kontakt únikovka
 
 Aplikace na celodenní šifrovačku pro dětský tábor Kontakt
 

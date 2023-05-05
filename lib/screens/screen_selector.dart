@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'cipher_manager.dart';
+import 'knowledge_base.dart';
+
 class ScreenSelector extends StatefulWidget {
   const ScreenSelector({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -21,17 +15,9 @@ class ScreenSelector extends StatefulWidget {
 class _ScreenSelectorState extends State<ScreenSelector> {
   int _selectedIndex = 0;
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Countdown',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Knowledge database',
-      style: optionStyle,
-    ),
+    CipherManagerScreen(),
+    KnowledgeBaseScreen()
   ];
 
   void _onItemTapped(int index) {
