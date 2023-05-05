@@ -9,15 +9,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Kontakt únikovka',
       theme: ThemeData(
-        primarySwatch: Colors.brown,
+        primarySwatch: Colors.lightGreen,
       ),
-      home: const ScreenSelector(title: 'Kontakt'),
+      home: const ScreenSelector(),
     );
   }
 }

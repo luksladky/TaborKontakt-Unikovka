@@ -13,6 +13,7 @@ class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text('Index 0: Countdown', style: optionStyle));
+    return Container(
+        child: Text('Index 1: Knowledge base', style: optionStyle));
   }
 }
