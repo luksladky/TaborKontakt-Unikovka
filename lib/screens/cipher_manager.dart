@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/countdown_timer.dart';
+
 class CipherManagerScreen extends StatefulWidget {
   const CipherManagerScreen({Key? key}) : super(key: key);
 
@@ -14,10 +16,14 @@ class _CipherManagerScreenState extends State<CipherManagerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(
-        'Index 0: Countdown',
-        style: optionStyle,
-      ),
+      width: 400,
+      child: Column(children: <Widget>[
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: CountdownTimer(
+              DateTime.now().add(Duration(hours: 2, minutes: 30, seconds: 0))),
+        )
+      ]),
     );
   }
 }
