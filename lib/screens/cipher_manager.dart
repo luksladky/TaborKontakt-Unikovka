@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'widgets/countdown_timer.dart';
+import 'widgets/password_input.dart';
 
 class CipherManagerScreen extends StatefulWidget {
   const CipherManagerScreen({Key? key}) : super(key: key);
@@ -22,7 +23,8 @@ class _CipherManagerScreenState extends State<CipherManagerScreen> {
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: CountdownTimer(
               DateTime.now().add(Duration(hours: 2, minutes: 30, seconds: 0))),
-        )
+        ),
+        CipherInput(),
       ]),
     );
   }
