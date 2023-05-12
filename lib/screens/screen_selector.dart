@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'cipher_manager.dart';
-import 'knowledge_base.dart';
+import 'cipher_screen.dart';
+import 'knowledge_base_list.dart';
 
 class ScreenSelector extends StatefulWidget {
   const ScreenSelector({super.key});

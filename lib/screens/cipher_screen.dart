@@ -21,8 +21,7 @@ class _CipherManagerScreenState extends State<CipherManagerScreen> {
       child: Column(children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: CountdownTimer(
-              DateTime.now().add(Duration(hours: 2, minutes: 30, seconds: 0))),
+          child: CountdownTimer(),
         ),
         CipherInput(),
       ]),

@@ -18,7 +18,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  provider: ^6.0.5
   timer_count_down: ^2.2.0
+
 
 dev_dependencies:
   flutter_test:
