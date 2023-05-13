@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'cipher_screen.dart';
-import 'knowledge_base_list.dart';
+import 'knowledge_list.dart';
 
 class ScreenSelector extends StatefulWidget {
   const ScreenSelector({super.key});
@@ -38,7 +38,7 @@ class _ScreenSelectorState extends State<ScreenSelector> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.lightbulb_outline),
-            label: 'Centrální mozek lidstva',
+            label: 'Centrální databáze',
           ),
         ],
         currentIndex: _selectedIndex,

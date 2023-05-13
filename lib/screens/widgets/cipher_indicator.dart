@@ -31,6 +31,5 @@ class CipherIndicator extends StatelessWidget {
       default:
         return Colors.black12;
     }
-    ;
   }
 }
