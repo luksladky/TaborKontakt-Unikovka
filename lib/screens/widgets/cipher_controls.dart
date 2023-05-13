@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kontakt_unikovka/screens/widgets/cipher_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/cipher_manager.dart';
@@ -23,26 +24,24 @@ class _CipherInputState extends State<CipherInput> {
 
     return Container(
         child: Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                onSubmitted: (value) {
-                  submitPassword();
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: "Zadej heslo"),
-              ),
+      CipherIndicator(),
+      Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              onSubmitted: (value) {
+                submitPassword();
+              },
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), hintText: "Zadej heslo"),
             ),
-            IconButton(
-              icon: Icon(Icons.verified_rounded),
-              onPressed: submitPassword,
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: Icon(Icons.verified_rounded),
+            onPressed: submitPassword,
+          ),
+        ],
       ),
       SizedBox(height: 16),
       Text(cipherManager.coordinates),

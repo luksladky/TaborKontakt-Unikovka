@@ -9,7 +9,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   late Duration _remainingTime;
 
   int _cipherIndex = 0;
-  List<CipherData> _ciphers = buildCipherData();
+  List<Cipher> _ciphers = buildCipherData();
 
   CipherManager(this.finalTime) {
     _remainingTime = finalTime.difference(DateTime.now());
@@ -27,7 +27,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   Duration get remainingTime => _remainingTime;
 
-  CipherData get activeCipher => _ciphers[_cipherIndex];
+  Cipher get activeCipher => _ciphers[_cipherIndex];
 
   String get coordinates => activeCipher.coordinates;
 
@@ -37,6 +37,8 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   bool get isHintShowed => activeCipher.status == Solved.NoButHintDisplayed;
 
+  List<Cipher> get ciphers => _ciphers;
+
   void nextCipher() {
     if (_cipherIndex < _ciphers.length - 1) {
       switch (activeCipher.status) {
@@ -44,7 +46,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
           activeCipher.status = Solved.Yes;
           break;
         case Solved.NoButHintDisplayed:
-          activeCipher.status = Solved.Yes;
+          activeCipher.status = Solved.YesWithHint;
           break;
       }
       _cipherIndex++;
@@ -61,12 +63,14 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   void showHint() {
     if (activeCipher.status == Solved.No) {
       activeCipher.status = Solved.NoButHintDisplayed;
+      penalizeTime();
       notifyListeners();
     }
   }
 
   void showSolution() {
     activeCipher.status = Solved.YesWithSolution;
+    penalizeTime();
     nextCipher();
   }
 
@@ -90,7 +94,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
 enum Solved { No, NoButHintDisplayed, YesWithHint, YesWithSolution, Yes }
 
-class CipherData {
+class Cipher {
   String password;
 
   String coordinates;
@@ -98,13 +102,11 @@ class CipherData {
 
   Solved status = Solved.No;
 
-  CipherData(this.password, this.coordinates, this.hint);
+  Cipher(this.password, this.coordinates, this.hint);
 }
 
-List<CipherData> buildCipherData() => [
-      CipherData(
-          "grep", "Souradnice prvniho stanoviste", "Zkus vylezt na strom"),
-      CipherData("citron", "jdete na sever", "Podivej se do databaze"),
-      CipherData(
-          "pomeranc", "jdete na jih", "Tady be se hodilo znat morseovku.`")
+List<Cipher> buildCipherData() => [
+      Cipher("grep", "Souradnice prvniho stanoviste", "Zkus vylezt na strom"),
+      Cipher("citron", "jdete na sever", "Podivej se do databaze"),
+      Cipher("pomeranc", "jdete na jih", "Tady be se hodilo znat morseovku.`")
     ];

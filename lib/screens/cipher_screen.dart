@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'widgets/countdown_timer.dart';
-import 'widgets/password_input.dart';
+import 'widgets/cipher_controls.dart';
 
 class CipherManagerScreen extends StatefulWidget {
   const CipherManagerScreen({Key? key}) : super(key: key);
