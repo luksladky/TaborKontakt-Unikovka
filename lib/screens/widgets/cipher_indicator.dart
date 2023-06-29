@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kontakt_unikovka/state/cipher_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../data/cipher_status.dart';
+
 class CipherIndicator extends StatelessWidget {
+  const CipherIndicator({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Consumer<CipherManager>(builder: (context, cipherManager, child) {
@@ -11,10 +15,12 @@ class CipherIndicator extends StatelessWidget {
         children: [
           for (int i = 0; i < cipherManager.ciphers.length; i++)
             Container(
-                color: getCipherStateColor(cipherManager.ciphers[i].status),
-                width: 20,
-                height: 30,
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 4))
+              color: getCipherStateColor(cipherManager.ciphers[i].status),
+              width: 20,
+              height: 30,
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Text("$i"),
+            )
         ],
       );
     });

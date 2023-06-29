@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
+import 'package:isar/isar.dart';
+import 'package:kontakt_unikovka/screens/data/cipher_status.dart';
 
 class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   final DateTime finalTime;
@@ -11,7 +14,10 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   late int _cipherIndex;
   late List<Cipher> _ciphers;
 
+  late Isar _isar;
+
   CipherManager(this.finalTime) {
+    _isar = GetIt.instance.get<Isar>();
     init();
 
     _remainingTime = finalTime.difference(DateTime.now());
@@ -28,6 +34,12 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   void init() {
     _cipherIndex = 0;
     _ciphers = _buildCipherData();
+    final status = _isar.cipherStatus.getSync(0);
+    if (status != null) {
+      for (int i = 0; i < _ciphers.length; ++i) {
+        _ciphers[i].status = status[i];
+      }
+    }
   }
 
   DateTime get counterFinalTime => finalTime;
@@ -68,10 +80,17 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   void guessPassword(String password) {
     if (password == "resetuj_appku") {
+      _isar.writeTxnSync(() {
+        _isar.cipherStatus.clearSync();
+      });
       init();
     }
     if (password == currentPassword) {
       nextCipher();
+      var cipherStatus = CipherStatus(_ciphers.map((c) => c.status).toList());
+      _isar.writeTxnSync(() {
+        _isar.cipherStatus.putSync(cipherStatus);
+      });
     }
   }
 
@@ -106,8 +125,6 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     super.dispose();
   }
 }
-
-enum Solved { No, NoButHintDisplayed, YesWithHint, YesWithSolution, Yes }
 
 class Cipher {
   String password;
