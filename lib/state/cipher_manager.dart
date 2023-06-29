@@ -8,10 +8,12 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   late Timer _timer;
   late Duration _remainingTime;
 
-  int _cipherIndex = 0;
-  List<Cipher> _ciphers = buildCipherData();
+  late int _cipherIndex;
+  late List<Cipher> _ciphers;
 
   CipherManager(this.finalTime) {
+    init();
+
     _remainingTime = finalTime.difference(DateTime.now());
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingTime.inSeconds > 0) {
@@ -21,6 +23,11 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
       }
       notifyListeners();
     });
+  }
+
+  void init() {
+    _cipherIndex = 0;
+    _ciphers = _buildCipherData();
   }
 
   DateTime get counterFinalTime => finalTime;
@@ -48,6 +55,11 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
         case Solved.NoButHintDisplayed:
           activeCipher.status = Solved.YesWithHint;
           break;
+        case Solved.YesWithHint:
+        case Solved.YesWithSolution:
+        case Solved.Yes:
+          // nothing to do
+          break;
       }
       _cipherIndex++;
     }
@@ -55,6 +67,9 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void guessPassword(String password) {
+    if (password == "resetuj_appku") {
+      init();
+    }
     if (password == currentPassword) {
       nextCipher();
     }
@@ -105,7 +120,7 @@ class Cipher {
   Cipher(this.password, this.coordinates, this.hint);
 }
 
-List<Cipher> buildCipherData() => [
+List<Cipher> _buildCipherData() => [
       Cipher("grep", "Souradnice prvniho stanoviste", "Zkus vylezt na strom"),
       Cipher("citron", "jdete na sever", "Podivej se do databaze"),
       Cipher("pomeranc", "jdete na jih", "Tady be se hodilo znat morseovku.`")

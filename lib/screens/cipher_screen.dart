@@ -11,13 +11,10 @@ class CipherManagerScreen extends StatefulWidget {
 }
 
 class _CipherManagerScreenState extends State<CipherManagerScreen> {
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 400,
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),

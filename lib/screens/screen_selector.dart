@@ -26,26 +26,28 @@ class _ScreenSelectorState extends State<ScreenSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lock_open),
-            label: 'Zadávání hesel',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb_outline),
-            label: 'Centrální databáze',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        backgroundColor: Colors.black,
-        selectedItemColor: Colors.lightGreenAccent,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.lock_open),
+              label: 'Zadávání hesel',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.lightbulb_outline),
+              label: 'Centrální databáze',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          backgroundColor: Colors.black,
+          selectedItemColor: Colors.lightGreenAccent,
+          unselectedItemColor: Colors.grey,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }
