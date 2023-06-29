@@ -18,7 +18,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_sms: ^2.3.3
   provider: ^6.0.5
+  riverpod: ^2.3.6
+
 
 
 dev_dependencies:

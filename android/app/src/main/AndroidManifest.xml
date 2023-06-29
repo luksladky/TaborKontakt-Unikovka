@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kontakt_unikovka">
-   <application
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <application
         android:label="kontakt_unikovka"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

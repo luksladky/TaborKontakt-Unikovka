@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.lightGreen,
       ),
+      debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider(
         create: (_) => CipherManager(
             DateTime.now().add(Duration(hours: 2, minutes: 30, seconds: 0))),
