@@ -11,7 +11,9 @@ class CipherStatus {
   @Enumerated(EnumType.name)
   final List<Solved> statuses;
 
-  const CipherStatus(this.statuses);
+  final int penaltyInMinutes;
+
+  const CipherStatus(this.statuses, this.penaltyInMinutes);
 
   Solved operator [](int i) => statuses[i];
 }

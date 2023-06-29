@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kontakt_unikovka/state/cipher_manager.dart';
 import 'package:provider/provider.dart';
 
-import '../data/cipher_status.dart';
+import '../../state/cipher_status.dart';
 
 class CipherIndicator extends StatelessWidget {
   const CipherIndicator({super.key});

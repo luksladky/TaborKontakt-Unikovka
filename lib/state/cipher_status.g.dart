@@ -17,8 +17,13 @@ const CipherStatusSchema = CollectionSchema(
   name: r'CipherStatus',
   id: 8422916380627193270,
   properties: {
-    r'statuses': PropertySchema(
+    r'penaltyInMinutes': PropertySchema(
       id: 0,
+      name: r'penaltyInMinutes',
+      type: IsarType.long,
+    ),
+    r'statuses': PropertySchema(
+      id: 1,
       name: r'statuses',
       type: IsarType.stringList,
       enumMap: _CipherStatusstatusesEnumValueMap,
@@ -60,8 +65,9 @@ void _cipherStatusSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
+  writer.writeLong(offsets[0], object.penaltyInMinutes);
   writer.writeStringList(
-      offsets[0], object.statuses.map((e) => e.name).toList());
+      offsets[1], object.statuses.map((e) => e.name).toList());
 }
 
 CipherStatus _cipherStatusDeserialize(
@@ -72,10 +78,11 @@ CipherStatus _cipherStatusDeserialize(
 ) {
   final object = CipherStatus(
     reader
-            .readStringList(offsets[0])
+            .readStringList(offsets[1])
             ?.map((e) => _CipherStatusstatusesValueEnumMap[e] ?? Solved.No)
             .toList() ??
         [],
+    reader.readLong(offsets[0]),
   );
   return object;
 }
@@ -88,6 +95,8 @@ P _cipherStatusDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
       return (reader
               .readStringList(offset)
               ?.map((e) => _CipherStatusstatusesValueEnumMap[e] ?? Solved.No)
@@ -250,6 +259,62 @@ extension CipherStatusQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      penaltyInMinutesEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'penaltyInMinutes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      penaltyInMinutesGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'penaltyInMinutes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      penaltyInMinutesLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'penaltyInMinutes',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      penaltyInMinutesBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'penaltyInMinutes',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -491,7 +556,21 @@ extension CipherStatusQueryLinks
     on QueryBuilder<CipherStatus, CipherStatus, QFilterCondition> {}
 
 extension CipherStatusQuerySortBy
-    on QueryBuilder<CipherStatus, CipherStatus, QSortBy> {}
+    on QueryBuilder<CipherStatus, CipherStatus, QSortBy> {
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
+      sortByPenaltyInMinutes() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'penaltyInMinutes', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
+      sortByPenaltyInMinutesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'penaltyInMinutes', Sort.desc);
+    });
+  }
+}
 
 extension CipherStatusQuerySortThenBy
     on QueryBuilder<CipherStatus, CipherStatus, QSortThenBy> {
@@ -506,10 +585,31 @@ extension CipherStatusQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
+      thenByPenaltyInMinutes() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'penaltyInMinutes', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
+      thenByPenaltyInMinutesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'penaltyInMinutes', Sort.desc);
+    });
+  }
 }
 
 extension CipherStatusQueryWhereDistinct
     on QueryBuilder<CipherStatus, CipherStatus, QDistinct> {
+  QueryBuilder<CipherStatus, CipherStatus, QDistinct>
+      distinctByPenaltyInMinutes() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'penaltyInMinutes');
+    });
+  }
+
   QueryBuilder<CipherStatus, CipherStatus, QDistinct> distinctByStatuses() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'statuses');
@@ -522,6 +622,12 @@ extension CipherStatusQueryProperty
   QueryBuilder<CipherStatus, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<CipherStatus, int, QQueryOperations> penaltyInMinutesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'penaltyInMinutes');
     });
   }
 

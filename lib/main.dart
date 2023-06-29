@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
-import 'package:kontakt_unikovka/screens/data/cipher_status.dart';
+import 'package:kontakt_unikovka/state/cipher_status.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'screens/data/constants.dart';
 import 'screens/screen_selector.dart';
 import 'state/cipher_manager.dart';
 
@@ -33,8 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider(
-        create: (_) => CipherManager(
-            DateTime.now().add(Duration(hours: 2, minutes: 30, seconds: 0))),
+        create: (_) => CipherManager(FINAL_TIME),
         child: const ScreenSelector(),
       ),
     );

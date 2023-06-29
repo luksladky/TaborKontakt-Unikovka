@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
-import 'package:kontakt_unikovka/screens/data/cipher_status.dart';
+import 'package:kontakt_unikovka/screens/data/ciphers.dart';
+import 'package:kontakt_unikovka/screens/data/constants.dart';
+import 'package:kontakt_unikovka/state/cipher_status.dart';
 
 class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   final DateTime finalTime;
 
   late Timer _timer;
   late Duration _remainingTime;
+  late Duration _timePenalty;
 
   late int _cipherIndex;
   late List<Cipher> _ciphers;
@@ -32,10 +35,12 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void init() {
+    _timePenalty = Duration.zero;
     _cipherIndex = 0;
-    _ciphers = _buildCipherData();
+    _ciphers = buildCipherData();
     final status = _isar.cipherStatus.getSync(0);
     if (status != null) {
+      _timePenalty = Duration(minutes: status.penaltyInMinutes);
       for (int i = 0; i < _ciphers.length; ++i) {
         _ciphers[i].status = status[i];
       }
@@ -44,7 +49,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   DateTime get counterFinalTime => finalTime;
 
-  Duration get remainingTime => _remainingTime;
+  Duration get remainingTime => _remainingTime - _timePenalty;
 
   Cipher get activeCipher => _ciphers[_cipherIndex];
 
@@ -84,10 +89,11 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
         _isar.cipherStatus.clearSync();
       });
       init();
+      notifyListeners();
     }
     if (password == currentPassword) {
       nextCipher();
-      var cipherStatus = CipherStatus(_ciphers.map((c) => c.status).toList());
+      var cipherStatus = CipherStatus(_ciphers.map((c) => c.status).toList(), _timePenalty.inMinutes);
       _isar.writeTxnSync(() {
         _isar.cipherStatus.putSync(cipherStatus);
       });
@@ -97,19 +103,15 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   void showHint() {
     if (activeCipher.status == Solved.No) {
       activeCipher.status = Solved.NoButHintDisplayed;
-      penalizeTime();
+      _timePenalty += PENALTY_HINT;
       notifyListeners();
     }
   }
 
   void showSolution() {
     activeCipher.status = Solved.YesWithSolution;
-    penalizeTime();
+    _timePenalty += PENALTY_SHOW_SOLUTION;
     nextCipher();
-  }
-
-  void penalizeTime() {
-    //TODO different name and actually subtract from the finalTime
   }
 
   //currentCoordinatesunter` readable inside the devtools by listing all of its properties
@@ -134,11 +136,5 @@ class Cipher {
 
   Solved status = Solved.No;
 
-  Cipher(this.password, this.coordinates, this.hint);
+  Cipher({required this.password, required this.coordinates, required this.hint});
 }
-
-List<Cipher> _buildCipherData() => [
-      Cipher("grep", "Souradnice prvniho stanoviste", "Zkus vylezt na strom"),
-      Cipher("citron", "jdete na sever", "Podivej se do databaze"),
-      Cipher("pomeranc", "jdete na jih", "Tady be se hodilo znat morseovku.`")
-    ];
