@@ -53,6 +53,8 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   Cipher get activeCipher => _ciphers[_cipherIndex];
 
+  int get activeCipherIndex => _cipherIndex;
+
   String get coordinates => activeCipher.coordinates;
 
   String get currentPassword => activeCipher.password;

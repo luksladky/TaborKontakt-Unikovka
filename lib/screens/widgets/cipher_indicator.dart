@@ -15,11 +15,16 @@ class CipherIndicator extends StatelessWidget {
         children: [
           for (int i = 0; i < cipherManager.ciphers.length; i++)
             Container(
-              color: getCipherStateColor(cipherManager.ciphers[i].status),
+              decoration: BoxDecoration(
+                  color: getCipherStateColor(cipherManager.ciphers[i].status),
+                  border: cipherManager.activeCipherIndex == i
+                      ? Border.all(color: Colors.black)
+                      : null,
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
               width: 20,
               height: 30,
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              child: Text("$i"),
+              child: Center(child: Text("$i")),
             )
         ],
       );
