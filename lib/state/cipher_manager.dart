@@ -134,9 +134,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     }
 
     Position? position = await _getCurrentPosition();
-
-    // TODO position string
-    String positionStr = _latLongDecToDms(position);
+    String positionStr = _latLongDecToDmsStr(position);
 
     if (status == PermissionStatus.granted) {
       final result = await sendSMS(
@@ -169,7 +167,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     return "$degree°$minutes'$seconds\"";
   }
 
-  String _latLongDecToDms(Position? position) {
+  String _latLongDecToDmsStr(Position? position) {
     if (position == null) return "neznama";
 
     return "Pozice: ${_decToDms(position.latitude)}N, ${_decToDms(position.longitude)}E";

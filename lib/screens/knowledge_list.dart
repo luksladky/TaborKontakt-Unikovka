@@ -10,27 +10,24 @@ class KnowledgeBaseScreen extends StatefulWidget {
 }
 
 class _KnowledgeBaseScreenState extends State<KnowledgeBaseScreen> {
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: ListView.builder(
+    return ListView.builder(
       itemCount: knowledgeDatabase.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(knowledgeDatabase[index].title),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => KnowledgeDetail(index: index),
-              ),
-            );
-          },
+    return ListTile(
+      title: Text(knowledgeDatabase[index].title),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => KnowledgeDetail(index: index),
+          ),
         );
       },
-    ));
+    );
+      },
+    );
   }
 }

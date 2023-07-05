@@ -30,7 +30,8 @@ class _CipherInputState extends State<CipherInput> {
           const Text(
               "Loď byla zničena. Vraťte se nejkratší cestou na základnu.",
               style: TextStyle(fontFamily: 'SourceCodePro')),
-          buildTextField(submitPassword)
+          const SizedBox(height: 16),
+          buildTextField(submitPassword, "Terminál")
         ],
       );
     }
@@ -42,7 +43,8 @@ class _CipherInputState extends State<CipherInput> {
             "Bezpečnostní systémy lodi jsou vyřazeny. Můžete vstoupit. Přibližně za dvě hodiny bude loď zničena. Pospěšte si.",
             style: TextStyle(fontFamily: 'SourceCodePro'),
           ),
-          buildTextField(submitPassword)
+          const SizedBox(height: 16),
+          buildTextField(submitPassword, "Terminál")
         ],
       );
     } else {
@@ -52,7 +54,7 @@ class _CipherInputState extends State<CipherInput> {
         Row(
           children: [
             Expanded(
-              child: buildTextField(submitPassword),
+              child: buildTextField(submitPassword, "Zadej heslo"),
             ),
             const SizedBox(width: 10),
             FilledButton(
@@ -116,15 +118,15 @@ class _CipherInputState extends State<CipherInput> {
     }
   }
 
-  TextField buildTextField(Function submitPassword) {
+  TextField buildTextField(Function submitPassword, String hintText) {
     return TextField(
         controller: _controller,
         textCapitalization: TextCapitalization.characters,
         onSubmitted: (value) {
           submitPassword();
         },
-        decoration: const InputDecoration(
-            border: OutlineInputBorder(), hintText: "Zadej heslo"),
+        decoration: InputDecoration(
+            border: const OutlineInputBorder(), hintText: hintText),
         inputFormatters: [
           UpperCaseTextFormatter(),
         ]);
