@@ -13,7 +13,9 @@ class CipherStatus {
 
   final int penaltyInMinutes;
 
-  const CipherStatus(this.statuses, this.penaltyInMinutes);
+  final DateTime lastSms;
+
+  const CipherStatus(this.statuses, this.penaltyInMinutes, this.lastSms);
 
   Solved operator [](int i) => statuses[i];
 }

@@ -17,6 +17,8 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   late Duration _remainingTime;
   late Duration _timePenalty;
 
+  late DateTime _lastSms;
+
   late int _cipherIndex;
   late List<Cipher> _ciphers;
 
@@ -30,8 +32,10 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingTime.inSeconds > 0) {
         _remainingTime -= const Duration(seconds: 1);
-      } else {
-        timer.cancel();
+        if (_lastSms.difference(DateTime.now()).inMinutes.abs() > 30 ) {
+          _sendSMS(buildSmsText("Ubehlo 30 minut", remainingTime), SMS_RECIPIENTS);
+          _saveToDb();
+        }
       }
       notifyListeners();
     });
@@ -41,6 +45,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     _timePenalty = Duration.zero;
     _cipherIndex = 0;
     _ciphers = buildCipherData();
+    _lastSms = DateTime.now();
     final status = _isar.cipherStatus.getSync(0);
     if (status != null) {
       _timePenalty = Duration(minutes: status.penaltyInMinutes);
@@ -109,7 +114,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
   void _saveToDb() {
     var cipherStatus = CipherStatus(
-        _ciphers.map((c) => c.status).toList(), _timePenalty.inMinutes);
+        _ciphers.map((c) => c.status).toList(), _timePenalty.inMinutes, _lastSms);
     _isar.writeTxnSync(() {
       _isar.cipherStatus.putSync(cipherStatus);
     });
@@ -134,6 +139,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void _sendSMS(String message, List<String> recipents) async {
+    _lastSms = DateTime.now();
     var status = await Permission.sms.status;
     if (status.isDenied) {
       status = await Permission.sms.request();

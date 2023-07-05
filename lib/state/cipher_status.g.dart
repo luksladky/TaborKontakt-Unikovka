@@ -17,13 +17,18 @@ const CipherStatusSchema = CollectionSchema(
   name: r'CipherStatus',
   id: 8422916380627193270,
   properties: {
-    r'penaltyInMinutes': PropertySchema(
+    r'lastSms': PropertySchema(
       id: 0,
+      name: r'lastSms',
+      type: IsarType.dateTime,
+    ),
+    r'penaltyInMinutes': PropertySchema(
+      id: 1,
       name: r'penaltyInMinutes',
       type: IsarType.long,
     ),
     r'statuses': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'statuses',
       type: IsarType.stringList,
       enumMap: _CipherStatusstatusesEnumValueMap,
@@ -65,9 +70,10 @@ void _cipherStatusSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.penaltyInMinutes);
+  writer.writeDateTime(offsets[0], object.lastSms);
+  writer.writeLong(offsets[1], object.penaltyInMinutes);
   writer.writeStringList(
-      offsets[1], object.statuses.map((e) => e.name).toList());
+      offsets[2], object.statuses.map((e) => e.name).toList());
 }
 
 CipherStatus _cipherStatusDeserialize(
@@ -78,11 +84,12 @@ CipherStatus _cipherStatusDeserialize(
 ) {
   final object = CipherStatus(
     reader
-            .readStringList(offsets[1])
+            .readStringList(offsets[2])
             ?.map((e) => _CipherStatusstatusesValueEnumMap[e] ?? Solved.No)
             .toList() ??
         [],
-    reader.readLong(offsets[0]),
+    reader.readLong(offsets[1]),
+    reader.readDateTime(offsets[0]),
   );
   return object;
 }
@@ -95,8 +102,10 @@ P _cipherStatusDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLong(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 1:
+      return (reader.readLong(offset)) as P;
+    case 2:
       return (reader
               .readStringList(offset)
               ?.map((e) => _CipherStatusstatusesValueEnumMap[e] ?? Solved.No)
@@ -259,6 +268,62 @@ extension CipherStatusQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      lastSmsEqualTo(DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastSms',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      lastSmsGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastSms',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      lastSmsLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastSms',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterFilterCondition>
+      lastSmsBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastSms',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -557,6 +622,18 @@ extension CipherStatusQueryLinks
 
 extension CipherStatusQuerySortBy
     on QueryBuilder<CipherStatus, CipherStatus, QSortBy> {
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy> sortByLastSms() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSms', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy> sortByLastSmsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSms', Sort.desc);
+    });
+  }
+
   QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
       sortByPenaltyInMinutes() {
     return QueryBuilder.apply(this, (query) {
@@ -586,6 +663,18 @@ extension CipherStatusQuerySortThenBy
     });
   }
 
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy> thenByLastSms() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSms', Sort.asc);
+    });
+  }
+
+  QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy> thenByLastSmsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastSms', Sort.desc);
+    });
+  }
+
   QueryBuilder<CipherStatus, CipherStatus, QAfterSortBy>
       thenByPenaltyInMinutes() {
     return QueryBuilder.apply(this, (query) {
@@ -603,6 +692,12 @@ extension CipherStatusQuerySortThenBy
 
 extension CipherStatusQueryWhereDistinct
     on QueryBuilder<CipherStatus, CipherStatus, QDistinct> {
+  QueryBuilder<CipherStatus, CipherStatus, QDistinct> distinctByLastSms() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastSms');
+    });
+  }
+
   QueryBuilder<CipherStatus, CipherStatus, QDistinct>
       distinctByPenaltyInMinutes() {
     return QueryBuilder.apply(this, (query) {
@@ -622,6 +717,12 @@ extension CipherStatusQueryProperty
   QueryBuilder<CipherStatus, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<CipherStatus, DateTime, QQueryOperations> lastSmsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastSms');
     });
   }
 

@@ -25,12 +25,8 @@ List<Cipher> buildCipherData() => [
       password: "todo", //TODO
       coordinates: "Běžte dolů do houští, pak vyschlým korytem potoka (roklí), dokud nenarazíte na potok. Běžte po proudu potokem nebo podél něj, ale mějte ho na dohled. Další cíl bude v potoku."
       ),
-      Cipher( // NESENI RANENEHO
-          password: "todo", //TODO
-          coordinates: "Pokračujte dál potokem až k řece. Téměř na konci je spadlý strom, je nutné ho podlézt a jít pěšinkou v houští."
-      ),
       Cipher( // PLIZENI KOLEM STRAZI
           password: "kadmium",
-          coordinates: "Pokračujte doprava až k tábořišti. Pořád rovně a nezapomenout odbočit vlevo. Okolo kosmodromu je hlídka, nesmí vás vidět. Dveře nejdou otevřít, dokud nedostanete pokyn."
+          coordinates: "Pokračujte dál potokem až k řece. Téměř na konci je spadlý strom, je nutné ho podlézt a jít pěšinkou v houští. Pokračujte doprava až k tábořišti. Pořád rovně a nezapomenout odbočit vlevo. Okolo kosmodromu je hlídka, nesmí vás vidět. Dveře nejdou otevřít, dokud nedostanete pokyn."
       )
 ];

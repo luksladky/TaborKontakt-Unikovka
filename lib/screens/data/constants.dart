@@ -1,5 +1,5 @@
 const PENALTY_HINT = Duration(minutes: 20);
-const PENALTY_SHOW_SOLUTION = Duration(minutes: 40);
+const PENALTY_SHOW_SOLUTION = Duration(minutes: 30);
 
 DateTime currentDate = DateTime.now();
 DateTime FINAL_TIME = DateTime(
