@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kontakt_unikovka/state/cipher_manager.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +7,7 @@ class CountdownTimer extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
 
-  CountdownTimer({
+  const CountdownTimer({
     super.key,
     this.fontSize = 48,
     this.fontWeight = FontWeight.bold,

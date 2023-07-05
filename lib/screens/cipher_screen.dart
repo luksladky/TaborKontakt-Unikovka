@@ -16,7 +16,7 @@ class _CipherManagerScreenState extends State<CipherManagerScreen> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(children: <Widget>[
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: CountdownTimer(),
         ),

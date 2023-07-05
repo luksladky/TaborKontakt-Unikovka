@@ -10,8 +10,8 @@ DateTime FINAL_TIME = DateTime(
   30,
 );
 
-List<String> SMS_RECIPIENTS = ["724410215"];
+List<String> SMS_RECIPIENTS = ["724410215", "605554044"]; // TODO cisla
 
-String buildSMS(String event, Duration remaining) {
-  return "Udalost: $event, zbyva do konce: ${remaining.inHours}:${remaining.inMinutes}";
+String buildSmsText(String event, Duration remaining) {
+  return "Udalost: $event, zbyva do konce: ${remaining.inHours}:${remaining.inMinutes % 60}";
 }

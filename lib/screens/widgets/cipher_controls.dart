@@ -1,12 +1,15 @@
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kontakt_unikovka/screens/data/constants.dart';
 import 'package:kontakt_unikovka/screens/widgets/cipher_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../state/cipher_manager.dart';
 
 class CipherInput extends StatefulWidget {
+  const CipherInput({super.key});
+
   @override
   _CipherInputState createState() => _CipherInputState();
 }
@@ -81,7 +84,8 @@ class _CipherInputState extends State<CipherInput> {
                     if (await confirm(
                       context,
                       title: const Text("Opravdu chcete ukázat nápovědu?"),
-                      content: const Text("Zkrátí se vám čas."),
+                      content: Text(
+                          "Zkrátí se vám čas o ${PENALTY_HINT.inMinutes}."),
                       textOK: const Text("Ukázat"),
                       textCancel: const Text("Zrušit"),
                     )) {
@@ -98,7 +102,8 @@ class _CipherInputState extends State<CipherInput> {
                   if (await confirm(
                     context,
                     title: const Text("Opravdu chcete ukázat úkol přeskočit?"),
-                    content: const Text("Zkrátí se vám čas o 40 minut."),
+                    content: Text(
+                        "Zkrátí se vám čas o ${PENALTY_SHOW_SOLUTION.inMinutes} minut."),
                     textOK: const Text("Přeskočit"),
                     textCancel: const Text("Zrušit"),
                   )) {

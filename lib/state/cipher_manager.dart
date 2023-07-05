@@ -102,13 +102,17 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     }
     if (password.toLowerCase() == currentPassword.toLowerCase()) {
       nextCipher();
-      var cipherStatus = CipherStatus(
-          _ciphers.map((c) => c.status).toList(), _timePenalty.inMinutes);
-      _isar.writeTxnSync(() {
-        _isar.cipherStatus.putSync(cipherStatus);
-      });
-      _sendSMS(buildSMS("Sifra uhodnuta", remainingTime), SMS_RECIPIENTS);
+      _saveToDb();
+      _sendSMS(buildSmsText("Sifra uhodnuta", remainingTime), SMS_RECIPIENTS);
     }
+  }
+
+  void _saveToDb() {
+    var cipherStatus = CipherStatus(
+        _ciphers.map((c) => c.status).toList(), _timePenalty.inMinutes);
+    _isar.writeTxnSync(() {
+      _isar.cipherStatus.putSync(cipherStatus);
+    });
   }
 
   void showHint() {
@@ -116,7 +120,8 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
       activeCipher.status = Solved.NoButHintDisplayed;
       _timePenalty += PENALTY_HINT;
       notifyListeners();
-      _sendSMS(buildSMS("Napoveda", remainingTime), SMS_RECIPIENTS);
+      _saveToDb();
+      _sendSMS(buildSmsText("Napoveda", remainingTime), SMS_RECIPIENTS);
     }
   }
 
@@ -124,7 +129,8 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     activeCipher.status = Solved.YesWithSolution;
     _timePenalty += PENALTY_SHOW_SOLUTION;
     nextCipher();
-    _sendSMS(buildSMS("Ukazano reseni", remainingTime), SMS_RECIPIENTS);
+    _saveToDb();
+    _sendSMS(buildSmsText("Ukazano reseni", remainingTime), SMS_RECIPIENTS);
   }
 
   void _sendSMS(String message, List<String> recipents) async {
@@ -164,7 +170,7 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
     double remainderSeconds = (remainderMinutes - minutes) * 60;
     int seconds = remainderSeconds.floor();
-    return "$degree°$minutes'$seconds\"";
+    return "$degree $minutes'$seconds\"";
   }
 
   String _latLongDecToDmsStr(Position? position) {
