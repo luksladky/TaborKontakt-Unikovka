@@ -24,78 +24,110 @@ class _CipherInputState extends State<CipherInput> {
       debugPrint("Pressed send button, text: ${_controller.text}");
     }
 
-    return Column(children: [
-      const CipherIndicator(),
-      Row(
+    if (cipherManager.remainingTime.inSeconds < 0) {
+      return Column(
         children: [
-          Expanded(
-            child: TextField(
-                controller: _controller,
-                textCapitalization: TextCapitalization.characters,
-                onSubmitted: (value) {
-                  submitPassword();
+          const Text(
+              "Loď byla zničena. Vraťte se nejkratší cestou na základnu.",
+              style: TextStyle(fontFamily: 'SourceCodePro')),
+          buildTextField(submitPassword)
+        ],
+      );
+    }
+
+    if (cipherManager.isAllSolved) {
+      return Column(
+        children: [
+          const Text(
+            "Bezpečnostní systémy lodi jsou vyřazeny. Můžete vstoupit. Přibližně za dvě hodiny bude loď zničena. Pospěšte si.",
+            style: TextStyle(fontFamily: 'SourceCodePro'),
+          ),
+          buildTextField(submitPassword)
+        ],
+      );
+    } else {
+      return Column(children: [
+        const CipherIndicator(),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: buildTextField(submitPassword),
+            ),
+            const SizedBox(width: 10),
+            FilledButton(
+              onPressed: submitPassword,
+              child: const Icon(Icons.question_mark),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          cipherManager.coordinates,
+          style: const TextStyle(fontFamily: 'SourceCodePro'),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (cipherManager.hint.isNotEmpty)
+              OutlinedButton(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.orange)),
+                  onPressed: () async {
+                    if (await confirm(
+                      context,
+                      title: const Text("Opravdu chcete ukázat nápovědu?"),
+                      content: const Text("Zkrátí se vám čas."),
+                      textOK: const Text("Ukázat"),
+                      textCancel: const Text("Zrušit"),
+                    )) {
+                      cipherManager.showHint();
+                    }
+                  },
+                  child: const Text("Ukázat nápovědu")),
+            const SizedBox(width: 20),
+            OutlinedButton(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red)),
+                onPressed: () async {
+                  if (await confirm(
+                    context,
+                    title: const Text("Opravdu chcete ukázat úkol přeskočit?"),
+                    content: const Text("Zkrátí se vám čas o 40 minut."),
+                    textOK: const Text("Přeskočit"),
+                    textCancel: const Text("Zrušit"),
+                  )) {
+                    cipherManager.showSolution();
+                    _controller.clear();
+                  }
                 },
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), hintText: "Zadej heslo"),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ]),
-          ),
-          const SizedBox(width: 10),
-          FilledButton(
-            onPressed: submitPassword,
-            child: const Icon(Icons.question_mark),
-          ),
-        ],
-      ),
-      const SizedBox(height: 16),
-      Text(cipherManager.coordinates),
-      const SizedBox(height: 16),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          OutlinedButton(
-              style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange)),
-              onPressed: () async {
-                if (await confirm(
-                  context,
-                  title: const Text("Opravdu chcete ukázat nápovědu?"),
-                  content: const Text("Zkrátí se vám čas."),
-                  textOK: const Text("Ukázat"),
-                  textCancel: const Text("Zrušit"),
-                )) {
-                  cipherManager.showHint();
-                }
-              },
-              child: Text("Ukázat nápovědu")),
-          const SizedBox(width: 20),
-          OutlinedButton(
-              style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red)),
-              onPressed: () async {
-                if (await confirm(
-                  context,
-                  title: const Text("Opravdu chcete ukázat řešení?"),
-                  content: const Text("Zkrátí se vám čas."),
-                  textOK: const Text("Ukázat"),
-                  textCancel: const Text("Zrušit"),
-                )) {
-                  cipherManager.showSolution();
-                  _controller.clear();
-                }
-              },
-              child: Text("Požádat o řešení")),
-        ],
-      ),
-      const SizedBox(height: 16),
-      Text(
-        cipherManager.hint,
-        style: const TextStyle(fontFamily: 'SourceCodePro'),
-      ),
-    ]);
+                child: const Text("Přeskočit úkol")),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          cipherManager.hint,
+          style: const TextStyle(fontFamily: 'SourceCodePro'),
+        ),
+      ]);
+    }
+  }
+
+  TextField buildTextField(Function submitPassword) {
+    return TextField(
+        controller: _controller,
+        textCapitalization: TextCapitalization.characters,
+        onSubmitted: (value) {
+          submitPassword();
+        },
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), hintText: "Zadej heslo"),
+        inputFormatters: [
+          UpperCaseTextFormatter(),
+        ]);
   }
 }
 
