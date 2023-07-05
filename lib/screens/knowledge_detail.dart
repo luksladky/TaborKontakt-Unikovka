@@ -13,14 +13,7 @@ class KnowledgeDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text(knowledgeDatabase[index].title),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Text('You clicked item $index'),
-            Text(knowledgeDatabase[index].content),
-          ],
-        ),
-      ),
+      body: knowledgeDatabase[index].content(),
     );
   }
 }
