@@ -6,11 +6,11 @@ DateTime FINAL_TIME = DateTime(
   currentDate.year,
   currentDate.month,
   currentDate.day,
-  17,
+  18,
   30,
 );
 
-List<String> SMS_RECIPIENTS = ["724410215", "605554044"]; // TODO cisla
+List<String> SMS_RECIPIENTS = ["739572819", "608263505", "605437805", "605554044"]; // TODO cisla
 
 String buildSmsText(String event, Duration remaining) {
   return "Udalost: $event, zbyva do konce: ${remaining.inHours}:${remaining.inMinutes % 60}";

@@ -30,10 +30,10 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
 
     _remainingTime = finalTime.difference(DateTime.now());
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime.inSeconds > 0) {
+      if (remainingTime.inSeconds > 0) {
         _remainingTime -= const Duration(seconds: 1);
-        if (_lastSms.difference(DateTime.now()).inMinutes.abs() > 30 ) {
-          _sendSMS(buildSmsText("Ubehlo 30 minut", remainingTime), SMS_RECIPIENTS);
+        if (_lastSms.difference(DateTime.now()).inMinutes.abs() > 15 ) {
+          _sendSMS(buildSmsText("Ubehlo 15 minut", remainingTime), SMS_RECIPIENTS);
           _saveToDb();
         }
       }
@@ -148,9 +148,12 @@ class CipherManager with ChangeNotifier, DiagnosticableTreeMixin {
     Position? position = await _getCurrentPosition();
     String positionStr = _latLongDecToDmsStr(position);
 
+    final now = DateTime.now();
+    final currentCipher = _cipherIndex +1;
+
     if (status == PermissionStatus.granted) {
       final result = await sendSMS(
-              message: "$message, $positionStr",
+              message: "${now.hour}:${now.minute} $message, sifra $currentCipher, $positionStr",
               recipients: recipents,
               sendDirect: true)
           .catchError((onError) {
